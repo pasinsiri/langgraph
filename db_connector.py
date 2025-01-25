@@ -18,3 +18,15 @@ if overwrite or not os.path.exists(local_file):
     # Backup - we will use this to "reset" our DB in each section
     shutil.copy(local_file, backup_file)
 
+# Convert the flights to present time for our tutorial
+def update_dates(file):
+    shutil.copy(backup_file, file)
+    conn = sqlite3.connect(file)
+    cursor = conn.cursor()
+
+    tables = pd.read_sql(
+        "SELECT name FROM sqlite_master WHERE type='table';", conn
+    ).name.tolist()
+    tdf = {}
+    for t in tables:
+        tdf[t] = pd.read_sql(f"SELECT * from {t}", conn)
