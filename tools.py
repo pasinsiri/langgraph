@@ -5,6 +5,8 @@ import openai
 from langchain_core.tools import tool
 from dotenv import load_dotenv
 
+load_dotenv()
+
 response = requests.get(
     "https://storage.googleapis.com/benchmarks-artifacts/travel-db/swiss_faq.md"
 )
