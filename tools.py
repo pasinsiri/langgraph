@@ -16,3 +16,11 @@ class VectorStoreRetriever:
         self._arr = np.array(vectors)
         self._docs = docs
         self._client = oai_client
+
+    @classmethod
+    def from_docs(cls, docs, oai_client):
+        embeddings = oai_client.embeddings.create(
+            model="text-embedding-3-small", input=[doc["page_content"] for doc in docs]
+        )
+        vectors = [emb.embedding for emb in embeddings.data]
+        return cls(docs, vectors, oai_client)
