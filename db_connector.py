@@ -41,3 +41,14 @@ def update_dates(file):
         pd.to_datetime(tdf["bookings"]["book_date"].replace("\\N", pd.NaT), utc=True)
         + time_diff
     )
+
+    datetime_columns = [
+        "scheduled_departure",
+        "scheduled_arrival",
+        "actual_departure",
+        "actual_arrival",
+    ]
+    for column in datetime_columns:
+        tdf["flights"][column] = (
+            pd.to_datetime(tdf["flights"][column].replace("\\N", pd.NaT)) + time_diff
+        )
