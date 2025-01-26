@@ -174,4 +174,4 @@ cython_debug/
 notes.txt
 
 # databases
-travel*.sqlite
+database
