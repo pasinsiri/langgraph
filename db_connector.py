@@ -52,3 +52,14 @@ def update_dates(file):
         tdf["flights"][column] = (
             pd.to_datetime(tdf["flights"][column].replace("\\N", pd.NaT)) + time_diff
         )
+
+    for table_name, df in tdf.items():
+        df.to_sql(table_name, conn, if_exists="replace", index=False)
+    del df
+    del tdf
+    conn.commit()
+    conn.close()
+
+    return file
+
+db = update_dates(local_file)
