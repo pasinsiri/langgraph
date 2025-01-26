@@ -24,3 +24,15 @@ class VectorStoreRetriever:
         )
         vectors = [emb.embedding for emb in embeddings.data]
         return cls(docs, vectors, oai_client)
+
+    def query(self, query: str, k: int = 5) -> list[dict]:
+        embed = self._client.embeddings.create(
+            model="text-embedding-3-small", input=[query]
+        )
+        # "@" is just a matrix multiplication in python
+        scores = np.array(embed.data[0].embedding) @ self._arr.T
+        top_k_idx = np.argpartition(scores, -k)[-k:]
+        top_k_idx_sorted = top_k_idx[np.argsort(-scores[top_k_idx])]
+        return [
+            {**self._docs[idx], "similarity": scores[idx]} for idx in top_k_idx_sorted
+        ]
