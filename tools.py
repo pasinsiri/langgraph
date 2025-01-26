@@ -36,3 +36,5 @@ class VectorStoreRetriever:
         return [
             {**self._docs[idx], "similarity": scores[idx]} for idx in top_k_idx_sorted
         ]
+
+retriever = VectorStoreRetriever.from_docs(docs, openai.Client())
